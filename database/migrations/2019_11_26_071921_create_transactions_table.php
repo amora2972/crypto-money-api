@@ -17,9 +17,10 @@ class CreateTransactionsTable extends Migration
             $table->bigIncrements('id');
             $table->bigInteger('currency_id')->unsigned();
             $table->bigInteger('user_id')->unsigned();
-            $table->string('transaction_guid')->unique();
+
             $table->bigInteger('amount');
-            $table->bigInteger('buying_rate');
+            $table->double('buying_rate');
+            $table->bigInteger('total');
 
             $table->foreign('currency_id')
                 ->references('id')->on('currencies');

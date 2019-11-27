@@ -22,8 +22,8 @@ Class CustomResponse
         if ($message != null && $message != "")
             $response->message = $message;
 
-
-        $response->result = $result;
+        if($code != self::$notFound)
+            $response->result = $result;
 
         return response()->json($response);
     }
