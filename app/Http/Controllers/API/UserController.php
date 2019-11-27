@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 use App\Http\Helpers\CustomResponse;
+use GuzzleHttp\Client;
 
 class UserController
 {
@@ -14,6 +15,7 @@ class UserController
 
     public function login(Request $request)
     {
+
         $data = $request->validate([
             'email' => 'email|required',
             'password' => 'required'
