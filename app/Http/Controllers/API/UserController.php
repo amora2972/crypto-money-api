@@ -74,4 +74,8 @@ class UserController
         return CustomResponse::customResponse($this->result, CustomResponse::$notFound, "api.please login first");
     }
 
+    public function getNewUser(Request $request)
+    {
+        return $request->user();
+    }
 }
