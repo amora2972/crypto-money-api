@@ -28,13 +28,15 @@ class CurrencyController extends Controller
 
     public function store(Request $request)
     {
-        $validated = Validator::make($request->all(), $this->store_rules())->validate();
+        $validator = Validator::make($request->all(), $this->store_rules());
 
-        $currency = new Currency;
-        $currency->symbol = @$request->symbol;
-        $currency->full_name = @$request->full_name;
-        $currency->name = @$request->name;
-        $currency->save();
+        if ($validator->fails()) {
+
+            return CustomResponse::customResponse($validator->messages(), CustomResponse::$unprocessableEntity);
+        }
+
+        $validated = $validator->validated();
+        Currency::create($validated);
 
         return CustomResponse::customResponse(
             $validated,
