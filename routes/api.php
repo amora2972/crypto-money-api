@@ -21,6 +21,8 @@ Route::group(['middleware' => ['json.response']], function () {
         Route::post('/login', 'UserController@login')->name('login.api');
         Route::post('/register', 'UserController@register')->name('register.api');
 
+        Route::apiResource('currency', 'CurrencyController');
+
         // private routes
         Route::middleware('auth:api')->group(function () {
             Route::get('/logout', 'UserController@logout')->name('logout');
