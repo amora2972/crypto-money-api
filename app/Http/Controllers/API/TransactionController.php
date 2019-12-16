@@ -93,10 +93,10 @@ class TransactionController
             $transaction->update($validator);
             $this->result["data"] = Transaction::where('id', $id)->first();
 
-            return CustomResponse::customResponse($this->result, CustomResponse::$successCode, "api.user has been updated successfully");
+            return CustomResponse::customResponse($this->result, CustomResponse::$successCode, "api.transaction has been updated successfully");
         } catch (\Exception $e) {
 
-            return CustomResponse::customResponse($this->result, CustomResponse::$errorCode, "api.user has not been updated successfully");
+            return CustomResponse::customResponse($this->result, CustomResponse::$errorCode, "api.transaction has not been updated successfully");
         }
     }
 
@@ -117,11 +117,11 @@ class TransactionController
         try {
 
             $this->result = $transaction->delete();
-            return CustomResponse::customResponse($this->result, CustomResponse::$successCode, "api.user has been updated successfully");
+            return CustomResponse::customResponse($this->result, CustomResponse::$successCode, "api.transaction has been deleted successfully");
 
         } catch (\Exception $e) {
 
-            return CustomResponse::customResponse($this->result, CustomResponse::$errorCode, "api.user has not been updated successfully");
+            return CustomResponse::customResponse($this->result, CustomResponse::$errorCode, "api.transaction has not been deleted successfully");
         }
     }
 }

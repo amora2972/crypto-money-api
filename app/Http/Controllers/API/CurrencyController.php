@@ -5,19 +5,25 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Http\Helpers\CustomResponse;
 use App\Models\API\Currency;
+use App\Models\API\UserCurrency;
+use Cassandra\Custom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use \Illuminate\Support\Facades\Validator;
 
 class CurrencyController extends Controller
 {
     private $result = [];
 
-    public function index()
+    public function index(Request $request)
     {
-        $data = Currency::all();
+        $currencyIds = UserCurrency::where('user_id', (string)$request->user()->id)->pluck('currency_id');
 
-        $this->result['data'] = $data;
+        $defaultCurrencies = Currency::where('editable', false)->get();
+        $specialCurrencies = Currency::where('editable', true)->whereIn('id', $currencyIds)->get();
+
+        $this->result['data'] = $defaultCurrencies->merge($specialCurrencies);
 
         return CustomResponse::customResponse(
             $this->result,
@@ -36,12 +42,31 @@ class CurrencyController extends Controller
         }
 
         $validated = $validator->validated();
-        Currency::create($validated);
+        $validated["editable"] = true;
+
+        DB::beginTransaction();
+        try {
+            $currency = Currency::create($validated);
+            UserCurrency::create([
+                "user_id" => $request->user()->id,
+                "currency_id" => $currency->id
+            ]);
+
+            DB::commit();
+
+            return CustomResponse::customResponse(
+                $validated,
+                CustomResponse::$successCode,
+                __('api.currencies are gotten successfully')
+            );
+        } catch (\Exception $e) {
+            DB::rollBack();
+        }
 
         return CustomResponse::customResponse(
-            $validated,
-            CustomResponse::$successCode,
-            __('api.currencies are gotten successfully')
+            null,
+            CustomResponse::$errorCode,
+            __('api.currency was not added successfully')
         );
     }
 
@@ -50,6 +75,7 @@ class CurrencyController extends Controller
         $data = Currency::find($id);
         if ($data == null) {
             return CustomResponse::customResponse(
+                null,
                 CustomResponse::$notFound,
                 __('api.currency not found')
             );
@@ -73,22 +99,49 @@ class CurrencyController extends Controller
             return CustomResponse::customResponse($validator->messages(), CustomResponse::$unprocessableEntity);
         }
 
-        dd($validator);
-
         $validated = $validator->validated();
-        $currency = Currency::update($validated)->where('id', $id);
 
+        $currencyAvailability = UserCurrency::where('user_id', (string)$request->user()->id)
+            ->where('currency_id', $id)->first();
+
+        if ($currencyAvailability == null) {
+
+            return CustomResponse::customResponse(null, CustomResponse::$unprocessableEntity, 'api.currency was not found');
+        }
+        Currency::where('id', $id)->where('editable', true)->update($validated);
+        $this->result["data"] = $validated;
+        return CustomResponse::customResponse($this->result,CustomResponse::$successCode, 'api.currency was updated successfully');
     }
 
-    public function destroy($id)
+    public function destroy(Request $request, $id)
     {
-        //
+        $currency = Currency::find($id);
+
+        if ($currency == null) {
+            return CustomResponse::customResponse(null, CustomResponse::$notFound, 'api.currency was not found');
+        }
+
+        if($currency->editable == false) {
+            return CustomResponse::customResponse(null, CustomResponse::$unprocessableEntity, 'api.currency cannot be updated');
+        }
+
+        DB::beginTransaction();
+        try {
+            UserCurrency::where('currency_id', $id)->where('user_id', $request->user()->id)->delete();
+            $this->result = $currency->delete();
+            DB::commit();
+            return CustomResponse::customResponse(null, CustomResponse::$successCode, "api.currency has been deleted successfully");
+
+        } catch (\Exception $e) {
+            DB::rollBack();
+            return CustomResponse::customResponse(null, CustomResponse::$errorCode, "api.currency has not been deleted successfully");
+        }
     }
 
     public function rules($id = null)
     {
         return [
-            'symbol' => 'required|unique:currencies,symbol,'.$id.',id|max:3',
+            'symbol' => 'required|unique:currencies,symbol,' . $id . ',id|max:3',
             'name' => 'required|max:255',
             'full_name' => '',
         ];
