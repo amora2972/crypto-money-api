@@ -28,7 +28,7 @@ class CurrencyController extends Controller
 
     public function store(Request $request)
     {
-        $validator = Validator::make($request->all(), $this->store_rules());
+        $validator = Validator::make($request->all(), $this->rules());
 
         if ($validator->fails()) {
 
@@ -48,6 +48,12 @@ class CurrencyController extends Controller
     public function show($id)
     {
         $data = Currency::find($id);
+        if ($data == null) {
+            return CustomResponse::customResponse(
+                CustomResponse::$notFound,
+                __('api.currency not found')
+            );
+        }
 
         $this->result['data'] = $data;
 
@@ -58,14 +64,20 @@ class CurrencyController extends Controller
         );
     }
 
-    public function edit($id)
-    {
-        //
-    }
-
     public function update(Request $request, $id)
     {
-        //
+        $validator = Validator::make($request->all(), $this->rules($id));
+
+        if ($validator->fails()) {
+
+            return CustomResponse::customResponse($validator->messages(), CustomResponse::$unprocessableEntity);
+        }
+
+        dd($validator);
+
+        $validated = $validator->validated();
+        $currency = Currency::update($validated)->where('id', $id);
+
     }
 
     public function destroy($id)
@@ -73,10 +85,10 @@ class CurrencyController extends Controller
         //
     }
 
-    public function store_rules()
+    public function rules($id = null)
     {
         return [
-            'symbol' => 'required|unique:currencies|max:3',
+            'symbol' => 'required|unique:currencies,symbol,'.$id.',id|max:3',
             'name' => 'required|max:255',
             'full_name' => '',
         ];
