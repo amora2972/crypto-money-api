@@ -1,10 +1,44 @@
 {
 	"info": {
-		"_postman_id": "899331a3-e81c-47ff-b659-b04b78339f73",
+		"_postman_id": "65dc1746-6f47-477f-9a33-9a213d17dd6c",
 		"name": "crypto-money",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
+		{
+			"name": "User",
+			"item": [
+				{
+					"name": "User :: Current User",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"type": "text",
+								"value": "Bearer  {{bearer_token}}"
+							},
+							{
+								"key": "Accept",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/user",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"user"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
+		},
 		{
 			"name": "Auth",
 			"item": [
@@ -18,17 +52,17 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "hasan.siwi@gmail.com",
+									"value": "omaralbahra@gmail.com",
 									"type": "text"
 								},
 								{
 									"key": "password",
-									"value": "123123123",
+									"value": "123456789",
 									"type": "text"
 								},
 								{
 									"key": "name",
-									"value": "Hasan",
+									"value": "omar",
 									"type": "text"
 								}
 							]
@@ -55,7 +89,7 @@
 							"formdata": [
 								{
 									"key": "email",
-									"value": "omaralbahra@sse.com",
+									"value": "omaralbahra@sss.com",
 									"type": "text"
 								},
 								{
@@ -100,155 +134,6 @@
 							],
 							"path": [
 								"logout"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "User",
-			"item": [
-				{
-					"name": "User :: Current User",
-					"request": {
-						"method": "GET",
-						"header": [
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer  {{bearer_token}}"
-							},
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"url": {
-							"raw": "{{URL}}/user",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"user"
-							]
-						}
-					},
-					"response": []
-				}
-			],
-			"protocolProfileBehavior": {}
-		},
-		{
-			"name": "Currencies",
-			"item": [
-				{
-					"name": "Currencies :: List All",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer  {{bearer_token}}"
-							},
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
-						},
-						"url": {
-							"raw": "{{URL}}/currency",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"currency"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Currencies :: Add New",
-					"request": {
-						"method": "POST",
-						"header": [
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer  {{bearer_token}}"
-							},
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json"
-							}
-						],
-						"body": {
-							"mode": "formdata",
-							"formdata": []
-						},
-						"url": {
-							"raw": "{{URL}}/currency",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"currency"
-							]
-						}
-					},
-					"response": []
-				},
-				{
-					"name": "Currencies :: Update",
-					"request": {
-						"method": "PUT",
-						"header": [
-							{
-								"key": "Authorization",
-								"type": "text",
-								"value": "Bearer  {{bearer_token}}"
-							},
-							{
-								"key": "Accept",
-								"type": "text",
-								"value": "application/json"
-							},
-							{
-								"key": "Content-Type",
-								"name": "Content-Type",
-								"value": "application/x-www-form-urlencoded",
-								"type": "text"
-							}
-						],
-						"body": {
-							"mode": "urlencoded",
-							"urlencoded": [
-								{
-									"key": "symbol",
-									"value": "ETN",
-									"type": "text"
-								}
-							]
-						},
-						"url": {
-							"raw": "{{URL}}/currency/{{id}}",
-							"host": [
-								"{{URL}}"
-							],
-							"path": [
-								"currency",
-								"{{id}}"
 							]
 						}
 					},
@@ -461,17 +346,190 @@
 				}
 			],
 			"protocolProfileBehavior": {}
+		},
+		{
+			"name": "Currency",
+			"item": [
+				{
+					"name": "Currency :: List All",
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer  {{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/currency",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Currency :: Add New",
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer  {{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "symbol",
+									"value": "BTF",
+									"type": "text"
+								},
+								{
+									"key": "full_name",
+									"value": "Bit Coin General",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "Bit Coin",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/currency",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"currency"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Currency :: Update By Id",
+					"request": {
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer  {{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "symbol",
+									"value": "BTT",
+									"type": "text"
+								},
+								{
+									"key": "name",
+									"value": "BitCoin tomer",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "{{URL}}/currency/{{id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"currency",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Currency :: Delete By Id",
+					"request": {
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Authorization",
+								"value": "Bearer  {{bearer_token}}",
+								"type": "text"
+							},
+							{
+								"key": "Accept",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "Content-Type",
+								"name": "Content-Type",
+								"value": "application/x-www-form-urlencoded",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "{{URL}}/currency/{{id}}",
+							"host": [
+								"{{URL}}"
+							],
+							"path": [
+								"currency",
+								"{{id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"protocolProfileBehavior": {}
 		}
 	],
 	"variable": [
 		{
-			"id": "cbf0948e-961f-405b-8c74-bbc6e0a068d5",
+			"id": "777f9ace-0556-44ef-a5c8-6f017f3e03b4",
 			"key": "url",
 			"value": "localhost:8000/api",
 			"type": "string"
 		},
 		{
-			"id": "b884abc4-51fc-4da9-a726-30580628aaf2",
+			"id": "1fce04c0-9bb9-4fd8-a353-0dcc5aa95359",
 			"key": "bearer_token",
 			"value": "0",
 			"type": "string"
