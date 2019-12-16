@@ -19,6 +19,7 @@ class CreateCurrenciesTable extends Migration
             $table->string('name');
             $table->string('full_name');
             $table->bigInteger('max_supply')->nullable();
+            $table->boolean('editable')->default(false);
             $table->timestamps();
         });
     }
