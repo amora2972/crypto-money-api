@@ -15,4 +15,8 @@ class Transaction extends Model
     public function scopeWithUser($query){
         return $query->where('user_id', request()->user()->id);
     }
+
+    public function scopeWithCurrency($query, $currencyId){
+        return $query->where('currency_id', $currencyId);
+    }
 }
