@@ -3,6 +3,7 @@
 namespace App\Http\Controllers\API;
 
 use App\User;
+use Cassandra\Custom;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
@@ -74,8 +75,9 @@ class UserController
         return CustomResponse::customResponse($this->result, CustomResponse::$notFound, "api.please login first");
     }
 
-    public function getNewUser(Request $request)
+    public function getCurrentUser(Request $request)
     {
-        return $request->user();
+        $this->result['data'] = $request->user();
+        return CustomResponse::customResponse($this->result, CustomResponse::$successCode);
     }
 }
