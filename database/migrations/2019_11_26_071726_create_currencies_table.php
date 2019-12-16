@@ -18,7 +18,7 @@ class CreateCurrenciesTable extends Migration
             $table->string('symbol')->unique();
             $table->string('name');
             $table->string('full_name');
-            $table->bigInteger('max_supply');
+            $table->bigInteger('max_supply')->nullable();
             $table->timestamps();
         });
     }
